@@ -8,9 +8,10 @@ public class App extends Summoner {
     }
 
     public App() {
-        super("Testanwendung");
+        super("Testanwendung", 400, 400);
 
-        newUIElement("Textfeld", "test", "", false);
+        System.out.println(newUIElement("Textfeld", "test", "", false));
+        System.out.println(newUIElement("Etikett", "test1", "Hallo", false));
 
         createUI();
 

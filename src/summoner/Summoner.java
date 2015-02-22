@@ -13,11 +13,14 @@ import java.util.Map;
 
 public class Summoner extends EBAnwendung {
 
-    List<Map> elements;
-    String title;
+    private List<Map> elements;
+    private String title;
+    private int bottom = 70;
+    private int marginBottom = 10;
+    private int windowPadding = 10;
 
-    public Summoner(String title) {
-        super(200, 100);
+    public Summoner(String title, int width, int height) {
+        super(width, height);
 
         elements = new ArrayList<Map>();
         this.title = title;
@@ -30,6 +33,8 @@ public class Summoner extends EBAnwendung {
 
         if (type == "Textfeld") {
             uiElement.put("type", "Textfield");
+        } else if(type == "Etikett") {
+            uiElement.put("type", "Label");
         } else {
             error = true;
         }
@@ -39,7 +44,7 @@ public class Summoner extends EBAnwendung {
         } else {
             boolean foundDouble = false;
             for (Map findUIElement : elements) {
-                if (findUIElement.get(identifier) != null) {
+                if (findUIElement.get(identifier) == identifier) {
                     foundDouble = true;
                 }
             }
@@ -69,11 +74,18 @@ public class Summoner extends EBAnwendung {
         titleLabel.setzeSchriftGroesse(25);
 
         for (Map uiElement : elements) {
-
             if (uiElement.get("type") == "Textfield") {
-                Textfeld textfield = new Textfeld(10, 50, this.bildschirm().breite() - 20, 20, uiElement.get("content").toString());
+                Textfeld textfield = new Textfeld(10, bottom, this.bildschirm().breite() - 20, 20, uiElement.get("content").toString());
                 uiElement.put("element", textfield);
-                System.out.println(uiElement.get("element"));
+
+                bottom += textfield.hoehe() + marginBottom;
+            }
+
+            if (uiElement.get("type") == "Label") {
+                Etikett etikett = new Etikett(10, bottom, this.bildschirm().breite() - 20, 20, uiElement.get("content").toString());
+                uiElement.put("element", etikett);
+
+                bottom += etikett.hoehe() + marginBottom;
             }
         }
     }
@@ -97,6 +109,8 @@ public class Summoner extends EBAnwendung {
             return toReturn;
         }
     }
+
+
 
 
 }
