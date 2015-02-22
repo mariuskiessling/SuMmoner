@@ -1,7 +1,8 @@
 package summoner;
 
-import sum.ereignis.EBAnwendung;
-import sum.ereignis.Ereignisanwendung;
+import sum.ereignis.*;
+import sum.komponenten.*;
+import sum.werkzeuge.*;
 import sum.komponenten.Etikett;
 import sum.komponenten.Textfeld;
 
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Summoner extends Ereignisanwendung {
+public class Summoner extends EBAnwendung {
 
     List<Map> elements;
     String title;
@@ -22,7 +23,7 @@ public class Summoner extends Ereignisanwendung {
         this.title = title;
     }
 
-    public boolean newUIElement(String type, String content, boolean validation) {
+    public boolean newUIElement(String type, String identifier, String content, boolean validation) {
         Map<String, Object> uiElement = new HashMap<String, Object>();
 
         boolean error = false;
@@ -33,7 +34,25 @@ public class Summoner extends Ereignisanwendung {
             error = true;
         }
 
+        if (identifier == "") {
+            error = true;
+        } else {
+            boolean foundDouble = false;
+            for (Map findUIElement : elements) {
+                if (findUIElement.get(identifier) != null) {
+                    foundDouble = true;
+                }
+            }
+
+            if (foundDouble) {
+                error = true;
+            } else {
+                uiElement.put("identifier", identifier);
+            }
+        }
+
         uiElement.put("content", content);
+        uiElement.put("element", null);
 
         if (error == false) {
             elements.add(uiElement);
@@ -49,20 +68,35 @@ public class Summoner extends Ereignisanwendung {
         titleLabel.setzeAusrichtung(1);
         titleLabel.setzeSchriftGroesse(25);
 
-        for(Map uiElement:elements) {
-            System.out.println(uiElement);
+        for (Map uiElement : elements) {
 
             if (uiElement.get("type") == "Textfield") {
-                Textfeld textfield = new Textfeld(10, 50, this.bildschirm().breite()-20, 20, uiElement.get("content").toString());
-
+                Textfeld textfield = new Textfeld(10, 50, this.bildschirm().breite() - 20, 20, uiElement.get("content").toString());
+                uiElement.put("element", textfield);
+                System.out.println(uiElement.get("element"));
             }
+        }
+    }
 
+    public Object uie(String identifier) {
+        boolean error = true;
+        Object toReturn = null;
+
+        for (Map findUIElement : elements) {
+            if (findUIElement.get("identifier") == identifier) {
+                toReturn = findUIElement.get("element");
+                error = false;
+            }
         }
 
+        System.out.println(toReturn);
+
+        if (error) {
+            return null;
+        } else {
+            return toReturn;
+        }
     }
 
-    public void bearbeiteLeerlauf() {
-        System.out.println("Leerlauf");
-    }
 
 }
