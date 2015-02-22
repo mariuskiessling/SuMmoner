@@ -11,11 +11,15 @@ public class App extends Summoner {
         super("Testanwendung", 400, 400);
 
         System.out.println(newUIElement("Textfeld", "test", "", false));
-        System.out.println(newUIElement("Etikett", "test1", "Hallo", false));
+        System.out.println(newUIElement("Etikett", "hallo", "Hallo", false));
+        System.out.println(newUIElement("Knopf", "hallo", "Sag hallo!", false));
 
         createUI();
 
         ((Textfeld) uie("test")).setzeFarbe(2);
+    }
 
+    public void hallo() {
+        System.out.println("Hallo!");
     }
 }

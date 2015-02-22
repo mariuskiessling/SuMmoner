@@ -17,7 +17,6 @@ public class Summoner extends EBAnwendung {
     private String title;
     private int bottom = 70;
     private int marginBottom = 10;
-    private int windowPadding = 10;
 
     public Summoner(String title, int width, int height) {
         super(width, height);
@@ -33,8 +32,10 @@ public class Summoner extends EBAnwendung {
 
         if (type == "Textfeld") {
             uiElement.put("type", "Textfield");
-        } else if(type == "Etikett") {
+        } else if (type == "Etikett") {
             uiElement.put("type", "Label");
+        } else if (type == "Knopf") {
+            uiElement.put("type", "Button");
         } else {
             error = true;
         }
@@ -87,6 +88,14 @@ public class Summoner extends EBAnwendung {
 
                 bottom += etikett.hoehe() + marginBottom;
             }
+
+            if (uiElement.get("type") == "Button") {
+                Knopf knopf = new Knopf(10, bottom, this.bildschirm().breite() - 20, 20, uiElement.get("content").toString(), uiElement.get("identifier").toString());
+                uiElement.put("element", knopf);
+
+                bottom += knopf.hoehe() + marginBottom;
+            }
+
         }
     }
 
@@ -101,16 +110,12 @@ public class Summoner extends EBAnwendung {
             }
         }
 
-        System.out.println(toReturn);
-
         if (error) {
             return null;
         } else {
             return toReturn;
         }
     }
-
-
 
 
 }
